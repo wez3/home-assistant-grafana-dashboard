@@ -1,0 +1,102 @@
+## Template for SMA
+- platform: template
+  sensors:
+    pv_power_lovelace:
+      friendly_name: 'Huidige opbrengst'
+      value_template: "{{ states.sensor.pv_power.state | replace('unknown','0') }}"
+
+## Templates to calculate daily power consumption
+- platform: template
+  sensors:
+    todays_power_consumption_low:
+      value_template: >
+        {{ (float(states.sensor.energy_consumption_tarif_1.state) - float(states.input_number.midnight_power_consumption_low.state)) | round(3) }}
+      unit_of_measurement: 'kWh'
+      friendly_name: "Today's Power Consumption Low"
+
+- platform: template
+  sensors:
+    todays_power_consumption_normal:
+      value_template: >
+        {{ (float(states.sensor.energy_consumption_tarif_2.state) - float(states.input_number.midnight_power_consumption_normal.state)) | round(3) }}
+      unit_of_measurement: 'kWh'
+      friendly_name: "Today's Power Consumption Normal"
+
+- platform: template
+  sensors:
+    todays_power_consumption:
+      value_template: >
+        {{ ((float(states.sensor.energy_consumption_tarif_2.state) - float(states.input_number.midnight_power_consumption_normal.state)) +
+           (float(states.sensor.energy_consumption_tarif_1.state) - float(states.input_number.midnight_power_consumption_low.state))) | round(3) }}
+      unit_of_measurement: 'kWh'
+      friendly_name: "Elektriciteit"
+
+## Templates to calculate daily power production
+- platform: template
+  sensors:
+    todays_power_production_low:
+      value_template: >
+        {{ (float(states.sensor.energy_production_tarif_1.state) - float(states.input_number.midnight_power_production_low.state)) | round(3) }}
+      unit_of_measurement: 'kWh'
+      friendly_name: "Today's Power Production Low"
+
+- platform: template
+  sensors:
+    todays_power_production_normal:
+      value_template: >
+        {{ (float(states.sensor.energy_production_tarif_2.state) - float(states.input_number.midnight_power_production_normal.state)) | round(3) }}
+      unit_of_measurement: 'kWh'
+      friendly_name: "Today's Power Production Normal"
+
+- platform: template
+  sensors:
+    todays_power_production:
+      value_template: >
+        {{ ((float(states.sensor.energy_production_tarif_2.state) - float(states.input_number.midnight_power_production_normal.state)) +
+           (float(states.sensor.energy_production_tarif_1.state) - float(states.input_number.midnight_power_production_low.state))) | round(3) }}
+      unit_of_measurement: 'kWh'
+      friendly_name: "Teruglevering"
+
+## Templates to calculate daily gas consumption
+- platform: template
+  sensors:
+    todays_gas_consumption:
+      value_template: >
+        {{ (float(states.sensor.gas_consumption.state) - float(states.input_number.midnight_gas_consumption.state)) | round(3) }}
+      unit_of_measurement: 'm3'
+      friendly_name: "Gas"
+
+## Euro's
+- platform: template
+  sensors:
+    todays_gas_price:
+      value_template: >
+        {{ ((float(states.sensor.gas_consumption.state) - float(states.input_number.midnight_gas_consumption.state)) | float * 0.75909 ) | round(2) }}
+      unit_of_measurement: 'euro'
+      friendly_name: "Gas kosten"
+
+- platform: template
+  sensors:
+    todays_power_price:
+      value_template: >
+        {{ (((float(states.sensor.energy_consumption_tarif_2.state) - float(states.input_number.midnight_power_consumption_normal.state)) +
+           (float(states.sensor.energy_consumption_tarif_1.state) - float(states.input_number.midnight_power_consumption_low.state))) | float * 0.23121 ) | round(2) }}
+      unit_of_measurement: 'euro'
+      friendly_name: "Elektriciteit kosten"
+
+- platform: template
+  sensors:
+    todays_power_production_price:
+      value_template: >
+        {{ (((float(states.sensor.energy_production_tarif_2.state) - float(states.input_number.midnight_power_production_normal.state)) +
+           (float(states.sensor.energy_production_tarif_1.state) - float(states.input_number.midnight_power_production_low.state))) | float * 0.06 ) | round(2) }}
+      unit_of_measurement: 'euro'
+      friendly_name: "Elektriciteit opbrengst"
+
+- platform: template
+  sensors:
+    daily_yield_kwh:
+      value_template: >
+        {{ float(states.sensor.daily_yield.state) | float / 1000 }}
+      unit_of_measurement: 'kWh'
+      friendly_name: "Zonnepanelen totaal opbrengst"
