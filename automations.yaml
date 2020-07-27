@@ -1,0 +1,26 @@
+## Reset power / gas
+- alias: Reset power / Gas variables
+  trigger:
+    platform: time
+    at: '00:00:00'
+  action:
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.midnight_power_consumption_low
+        value: "{{ states.sensor.energy_consumption_tarif_1.state }}"
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.midnight_power_production_low
+        value: "{{ states.sensor.energy_production_tarif_1.state }}"
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.midnight_power_consumption_normal
+        value: "{{ states.sensor.energy_consumption_tarif_2.state }}"
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.midnight_power_production_normal
+        value: "{{ states.sensor.energy_production_tarif_2.state }}"
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.midnight_gas_consumption
+        value: "{{ states.sensor.gas_consumption.state }}"
