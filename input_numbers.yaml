@@ -1,0 +1,25 @@
+## Input variables for calculating daily power consumption
+midnight_power_consumption_low:
+  name: Midnight Power Level Low
+  min: 0
+  max: 999999999
+midnight_power_consumption_normal:
+  name: Midnight Power Level Normal
+  min: 0
+  max: 999999999
+
+## Input variables for calculating daily power production
+midnight_power_production_low:
+  name: Midnight Power Level Low
+  min: 0
+  max: 999999999
+midnight_power_production_normal:
+  name: Midnight Power Level Normal
+  min: 0
+  max: 999999999
+
+## Input variables for calculating daily gas consumption
+midnight_gas_consumption:
+  name: Midnight Gas Level
+  min: 0
+  max: 999999999
